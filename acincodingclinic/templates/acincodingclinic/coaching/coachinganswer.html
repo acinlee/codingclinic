@@ -1,0 +1,73 @@
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+    </head>
+    <body>
+    <div id="coaching">
+    <form id="form" action="{% url 'acincodingclinic:AnswerCoaching' coachingboard.id%}" method="POST" enctype="multipart/form-data" >
+    {% csrf_token %}
+        <li>제목: {{coachingboard.Coaching_Title }}</li>
+        <li><input type="hidden" id="codetype" value="{{coaching.get_Coaching_ClassCode_display}}"> 
+        분야 - {{coaching.get_Coaching_ClassCode_display}}</li>
+        <li><label for="coachingcontent">내용 입력</label><br>
+        <textarea id = "coachingcontent" name = "coachingcontent" style="width:37%; height:100%;" row="20"></textarea></li>
+        <li><label for="codecontent">코드 입력</label><br>
+        <div id="htmleditor"></div>
+        <input type="hidden" id="codeeditor">
+        </li>
+        <li>{{form.Coaching_Files}}</li>
+        <button type="button" id="coaching_submit" class="btn btn-outline-primary btn-sm m-0 waves-effect mt-3" onclick="checkcode();">글쓰기</button>
+    </div>
+    </form>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.1/ace.js" charset="utf-8"></script>
+    <script>
+        var eh = ace.edit("htmleditor");
+        $( document ).ready(function() {
+            codetype = $("#codetype").val();
+            eh.setTheme("ace/theme/monokai");
+            if (codetype == 'C'){
+                eh.getSession().setMode("ace/mode/c_cpp");
+            }
+            else if (codetype == 'C++'){
+                eh.getSession().setMode("ace/mode/c_cpp");
+            }
+            else if (codetype == 'C#'){
+                eh.getSession().setMode("ace/mode/csharp");
+            }
+            else if (codetype == 'PYTHON'){
+                eh.getSession().setMode("ace/mode/python");
+            }
+            else if (codetype == 'JAVA'){
+                eh.getSession().setMode("ace/mode/java");
+            }
+            else if (codetype == 'WEB'){
+                eh.getSession().setMode("ace/mode/html");
+            }
+            else if (codetype == 'DB'){
+                eh.getSession().setMode("ace/mode/mysql");
+            }
+            else if (codetype == '기타'){
+                eh.getSession().setMode("ace/mode/html");
+            }
+            else {
+                eh.getSession().setMode("ace/mode/html");
+            }
+            $("#codeeditor").attr("name","htmleditor");
+        });
+
+        function checkcode(){
+            codevalue = eh.getValue();
+            $("#codeeditor").val(codevalue);
+            console.log($("#htmleditor").val())
+            $("#form").submit();
+        }
+
+    </script>
+    </body>
+</html>

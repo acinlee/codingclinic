@@ -1,0 +1,164 @@
+{% extends "acincodingclinic/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!--나눔 고딕-->
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+<!--주영's 아이콘-->
+<script src="https://kit.fontawesome.com/01bdf36058.js"></script>
+  <div class="container-fluid coachingmain">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10" style="padding-bottom:3%;">
+        <div class="form-group" style="padding-top:3%; padding-bottom:3%;">
+          <label style="font-weight:600; font-size:42px; color:#4d4d4d;">공지사항</label><label style="font-size:18px; color:#7c7c7c; padding-left:0.8%;">코딩클리닉 공지</label>
+          <div style="margin-top:0.3%; background-color:white; border-top: 1.5px solid #B0C4DE; border-right: 1.5px solid #B0C4DE; border-left: 1.5px solid #B0C4DE; border-bottom: 1.5px solid #B0C4DE; border-radius:10px 10px 10px 10px; ">
+            <div style="padding-top:3%; padding-bottom:3%; padding-left:6%; font-size:23px;">
+              <div style="padding-bottom:2%;">코딩클리닉의 새로운 소식을 확인해 보세요!</div>
+              <div>
+                코딩클리닉만의 차별화된 품질과 다양한 서비스를 제공해드리고자 계속해서 발전해 나가는 중입니다.<br>
+                별도의 문의, 건의 사항들은 <b style="color:#0081ff">Q&A</b> 게시판을 이용해주세요.
+              </div>  
+            </div>
+          </div>
+        </div>
+        <div class="row"style="padding-top:1%; color:#7c7c7c; padding-bottom:1%; text-align:center; width:98%; margin-left:1%; border-top:2px solid #c6c6c6; border-bottom:2px solid #c6c6c6;">
+            <div class="col-md-1">
+                <label style="margin-top:10%;">[공지]</label>
+            </div>
+            <div class="col-md-9" style="text-align:left; font-size:23px; color:#4d4d4d;">
+                <label style="margin-top:1%; font-weight:600;">{{notice.Notice_Title}}</label>
+            </div>
+            <div class="col-md-1">
+                <label style="margin-top:10%;">{{notice.Notice_User.CDC_Name}}</label>
+            </div>
+            <div class="col-md-1">
+                <label style="margin-top:10%;">{{notice.Notice_CreateDate|date:"Y/m/d"}}</label>
+            </div>
+        </div>
+        <div class="row" style="text-align:center; padding-top:1%; width:98%; margin-left:1%; border-bottom:2px solid #c6c6c6;">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10" style="text-align:left; padding-bottom:10%; color:#4d4d4d;">
+                {{notice.Notice_Content|safe}}
+            </div>
+            <div class="col-md-1" style="position:relative">
+                <div style="position:absolute; right:0px; bottom:10px; padding-right:25%; font-size:15px;">
+                    {% if notice.Notice_User.CDC_ID == request.session.CDC_ID or request.session.rank == '1'  %}
+                        <a href="{% url 'acincodingclinic:EditNotice' notice.id %}" style="text-decoration:none !important; color:#7c7c7c;">수정</a> 
+                        <a style=" text-decoration:none !important; color:#7c7c7c; cursor:pointer;" onclick="deleteUserPwCheck();">삭제</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row" style="text-align:center;width:98%; padding-top:3%; padding-bottom:3%; margin-left:1%;">
+            <div class="col-md-12">
+                <a href="{% url 'acincodingclinic:Notice_menu_default'%}"><button class="btn btn-outline" style="background-color:white; border-color:#dee2e6; width:8%; border-radius:10px; font-size:18px">전체목록</button></a>
+            </div>
+        </div>
+        <div class="row" style="text-align:center; color:#7c7c7c; width:98%; padding-top:1%; padding-bottom:1%; margin-left:1%; border-top:2px solid #c6c6c6; border-bottom:2px solid #c6c6c6;">
+            <div class="col-md-1">
+                <label style="margin-top:10%;"><i style="font-size:23px;" class="fas fa-angle-up"></i></label>
+            </div>
+            <div class="col-md-1">
+                <label style="margin-top:10%;">이전글</label>
+            </div>
+            <div class="col-md-8" style="text-align:left; color:#4d4d4d;">
+                {% if previous_board %}
+                    {% for previous in previous_board %}
+                        <a href="{% url 'acincodingclinic:ViewNotice' previous.id %}" style="text-decoration:none; color:#4d4d4d;"><label style="margin-top:1%; font-weight:600; cursor:pointer;">{{previous.Notice_Title}}</label></a>
+                    {% endfor %}
+                {% else %}
+                        <label style="margin-top:1%; font-weight:600;">이전글이 없습니다.</label>
+                {% endif %}
+            </div>
+            <div class="col-md-1">
+                {% if previous_board %}
+                    {% for previous in previous_board %}
+                        <label style="margin-top:10%;">{{previous.Notice_User.CDC_Name}}</label>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-1">
+                {% if previous_board %}
+                    {% for previous in previous_board %}
+                        <label style="margin-top:10%;">{{previous.Notice_CreateDate|date:"Y/m/d"}}</label>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row" style="text-align:center;width:98%; color:#7c7c7c; padding-top:1%; padding-bottom:1%; margin-left:1%; border-bottom:2px solid #c6c6c6;">
+            <div class="col-md-1">
+                <label style="margin-top:10%;"><i style="font-size:23px;" class="fas fa-angle-down"></i></label>
+            </div>
+            <div class="col-md-1">
+                <label style="margin-top:10%;">다음글</label>
+            </div>
+            <div class="col-md-8" style="text-align:left; color:#4d4d4d;">
+                {% if next_board %}
+                    {% for next in next_board %}
+                        <a href="{% url 'acincodingclinic:ViewNotice' next.id %}" style="text-decoration:none; color:#4d4d4d;"><label style="margin-top:1%; font-weight:600; cursor:pointer; ">{{next.Notice_Title}}</label></a>
+                    {% endfor %}
+                {% else %}
+                        <label style="margin-top:1%; font-weight:600;">다음글이 없습니다.</label>
+                {% endif %}
+            </div>
+            <div class="col-md-1">
+                {% if next_board %}
+                    {% for next in next_board %}
+                        <label style="margin-top:10%;">{{next.Notice_User.CDC_Name}}</label>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-1">
+                {% if next_board %}
+                    {% for next in next_board %}
+                        <label style="margin-top:10%;">{{next.Notice_CreateDate|date:"Y/m/d"}}</label>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+  </div>
+<script>
+    function showDeleteMask(){
+        var h = $(document).height();
+        var w = window.document.body.clientWidth;
+
+        var mask = $("<div id=mask onclick='deletemask();' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0';></div>");
+        var loadingImg = $("<div id='loadingImg' style='position : fixed; left : 45%; top : 30%; z-index : 10000;'><img src={% static 'acincodingclinic/img/design/loading.gif' %} width : 30px; height : 30px;></div>");
+        var DeletePopUp = $("<div id='DeletePopUp' style='position : fixed; left : 45%; top : 30%; z-index : 10000; font-size:20px;'><form action={% url 'acincodingclinic:DeleteNotice' notice.id%} method='POST'><label class='deletePwlabel'>비밀번호 입력</label><img src={% static 'acincodingclinic/img/design/Xmark.png' %} onclick='deletemask();' style='position:relative; left: 22%; width : 25px; height : 25px; cursor:pointer;'><input type='password' id='cdc_pw' name='cdc_pw' class='form-control' style='border-radius: 10px!important;' maxlength='15'><button type='submit' class='btn btn-primary' style='width:100%;border-radius: 10px!important;'>입력완료</button></form></div>");
+        
+        $('body').append(mask).append(DeletePopUp);
+        $("#mask").css({
+            'width' : w,
+            'height' : h,
+            'opacity' : '0.1'
+        });
+
+        $("#mask").show();
+        $("#DeletePopUp").show();
+    }
+
+	function removeDeleteMask(){
+        $("#mask, #DeletePopUp").hide();
+        $("#mask, #DeletePopUp").remove();
+    }
+
+    function deleteUserPwCheck(){
+        showDeleteMask();
+    }
+
+    function deletemask(){
+        removeDeleteMask();
+    }
+</script>
+{% endblock %}

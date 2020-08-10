@@ -1,0 +1,446 @@
+{% extends "acincodingclinic/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.1/ace.js" charset="utf-8"></script>
+<!--서머노트-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
+<!--나눔 고딕-->
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+<style>
+#htmleditor{
+    height:10%;
+    min-height:60vh;
+    padding-top :1%;
+    display:inline-block;
+}
+/* ace editor 사이즈 조절 */
+.ace_editor {
+    width: 100%;
+}
+.note-editor{
+    width: 100%;
+}
+</style>
+
+<div class="container-fluid coachingmain">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="form-group" style="padding-top:3%;">
+                <div style="border-bottom:1px solid #d9d9d9">
+                    <label style="font-weight:600; font-size:42px; color:#4d4d4d;">1:1코칭</label><label style="font-size:18px; color:#7c7c7c; padding-left:0.8%;">코딩클리닉만의 회원 맞춤 서비스</label>
+                </div>
+                {% for coaching_count in coaching %}
+                {% if forloop.counter|divisibleby:2 != 1 %}
+                <div class="row" style="padding-top:2%;">
+                    <div class="col-md-6" id="odd" style="background-color:#ffffff; border-top: 1px solid #ffffff; border-right: 1px solid #ffffff; border-left: 1px solid #ffffff; border-bottom: 1px solid #ffffff; border-radius:10px 10px 10px 10px; ">
+                        <div class="row">
+                            <div class="col-md-3" style="padding-left:7%; padding-top:3%;">
+                                <label style="font-weight:600; font-size:18px; color:#4d4d4d;">작성자</label>
+                                <img src="{% static 'acincodingclinic/img/design/coaching2.png'%}" style="width:100%;">
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row" style="padding-top:15%;">
+                                    <div class="col-md-2" style="color:#4c4c4c font-size:16px; font-weight:600;">
+                                        <div id="coaching_usr_id">
+                                            <label>아이디</label>
+                                        </div>
+                                        <div id="coaching_date" style="padding-top:10%;">
+                                            <label>작성 날짜</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10" style="color:#595959 font-size:16px;">
+                                        <div id="coaching_usr_id">
+                                            <label>{{coachingboard.Coaching_User.CDC_ID}}</label>
+                                        </div>
+                                        <div id="coaching_date" style="padding-top:1.5%;">
+                                            <label>{{coachingboard.Coaching_CreateDate|date:"Y/m/d"}}</label>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left:7%; padding-top:3%;">
+                            <div class="col-md-1">
+                                <div>
+                                    <label>제목</label>
+                                </div>
+                                <div>
+                                    <label>분야</label>
+                                </div>
+                                <div>
+                                    <label>내용</label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div>
+                                    <label>{{coachingboard.Coaching_Title}}</label>
+                                </div>
+                                <div id="usr_class_code">
+                                    <label>{{coachingboard.get_Coaching_ClassCode_display}}</label>
+                                </div>
+                                <div>
+                                    <label>{{coaching_count.Coaching_Content | safe}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            #htmleditor{{forloop.counter}}{
+                                height:10%;
+                                min-height:60vh;
+                                padding-top :1%;
+                                display:inline-block;
+                            }
+                        </style>
+                        <div id="htmleditor{{forloop.counter}}">
+                            {{coaching_count.Coaching_CodeContent}}
+                        </div>
+                        <script>
+                            function seteditor() {
+                                var eh = ace.edit("htmleditor{{forloop.counter}}");
+                                eh.setTheme("ace/theme/monokai");
+                                codetype = "{{coachingboard.get_Coaching_ClassCode_display}}"
+                                if (codetype == 'C'){
+                                    eh.getSession().setMode("ace/mode/c_cpp");
+                                }
+                                else if (codetype == 'C++'){
+                                    eh.getSession().setMode("ace/mode/c_cpp");
+                                }
+                                else if (codetype == 'C#'){
+                                    eh.getSession().setMode("ace/mode/csharp");
+                                }
+                                else if (codetype == 'Python'){
+                                    eh.getSession().setMode("ace/mode/python");
+                                }
+                                else if (codetype == 'JAVA'){
+                                    eh.getSession().setMode("ace/mode/java");
+                                }
+                                else if (codetype == 'WEB'){
+                                    eh.getSession().setMode("ace/mode/html");
+                                }
+                                else if (codetype == 'DB'){
+                                    eh.getSession().setMode("ace/mode/mysql");
+                                }
+                                else if (codetype == '기타'){
+                                    eh.getSession().setMode("ace/mode/html");
+                                }
+                                else {
+                                    eh.getSession().setMode("ace/mode/html");
+                                }
+                            };
+                            seteditor();
+                        </script>
+                        <div class="row" style="padding-left:4%; padding-top:3%; padding-bottom:3%;">
+                            <div class="col-md-1.5">
+                                <label style="font-weight:600;">첨부파일</label>
+                            </div>
+                            <div class="col-md-10">
+                                <div>
+                                    {% if coaching_count.coachingfilema_set.all.0.Coaching_Files %}
+                                        <a style="text-align:left; text-decoration:none !important; color:#4d4d4d; font-weight:600;" href='{{ coaching_count.coachingfilema_set.all.0.Coaching_Files.url}}' download="{{coaching_count.coachingfilema_set.all.0.Coaching_Files}}">{{ coaching_count.coachingfilema_set.all.0.Coaching_Files}}</a>
+                                    {% else %}
+                                        <label style="text-align:left; color:#4d4d4d; font-weight:600;">첨부파일이 없습니다.</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if coachingboard.Coaching_isAnswer == False and coaching_count.id == bigcoachingnum and coachingboard.Coaching_User.CDC_ID == request.session.cdc_id %}
+                        <div class="row" style="padding-left:4%; padding-top:3%; padding-bottom:3%;">
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-8">
+                            </div>
+                            <div class="col-md-3" style="font-size:14px;">
+                                <a href="{% url 'acincodingclinic:ModifyAnswer' coaching_count.id%}" style="text-decoration:none !important; color:#4d4d4d; font-weight:600; padding-left:48%;">수정</a> <a href="{% url 'acincodingclinic:DeleteAnswer' coaching_count.id %}" style="font-weight:600; padding-left:5%;text-decoration:none !important; color:#4d4d4d;">삭제</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {%else%}
+                    <div class="col-md-6" id="even" style="background-color:#d9d9d9; border-top: 1px solid #d9d9d9; border-right: 1px solid #d9d9d9; border-left: 1px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-radius:10px 10px 10px 10px; ">
+                        <div class="row">
+                            <div class="col-md-3" style="padding-left:7%; padding-top:3%;">
+                                <label style="font-weight:600; font-size:18px; color:#4d4d4d;">답변자</label>
+                                <img src="{% static 'acincodingclinic/img/design/coaching1.png'%}" style="width:100%;">
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row" style="padding-top:15%;">
+                                    <div class="col-md-2" style="color:#4c4c4c font-size:16px; font-weight:600;">
+                                        <div id="coaching_usr_id">
+                                            <label>아이디</label>
+                                        </div>
+                                        <div id="coaching_date" style="padding-top:10%;">
+                                            <label>작성 날짜</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10" style="color:#595959 font-size:16px;">
+                                        <div id="coaching_usr_id">
+                                            <!--<label>{{coaching_count.Coaching_author}}</label>-->
+                                            <label>코딩클리닉</label>
+                                        </div>
+                                        <div id="coaching_date" style="padding-top:1.5%;">
+                                            <label>{{coachingboard.Coaching_CreateDate|date:"Y/m/d"}}</label>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row" style="padding-left:7%; padding-top:3%;">
+                            <div class="col-md-1">
+                                <div>
+                                    <label>제목</label>
+                                </div>
+                                <div>
+                                    <label>분야</label>
+                                </div>
+                                <div>
+                                    <label>내용</label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div>
+                                    <label>{{coachingboard.Coaching_Title}}</label>
+                                </div>
+                                <div id="usr_class_code">
+                                    <label>{{coachingboard.get_Coaching_ClassCode_display}}</label>
+                                </div>
+                                <div>
+                                    <label>{{coaching_count.Coaching_Content | safe}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            #htmleditor{{forloop.counter}}{
+                                height:10%;
+                                min-height:60vh;
+                                padding-top :1%;
+                                display:inline-block;
+                            }
+                        </style>
+                        <div id="htmleditor{{forloop.counter}}">
+                            {{coaching_count.Coaching_CodeContent}}
+                        </div>
+                        <script>
+                            function seteditor() {
+                                var eh = ace.edit("htmleditor{{forloop.counter}}");
+                                eh.setTheme("ace/theme/monokai");
+                                codetype = "{{coachingboard.get_Coaching_ClassCode_display}}"
+                                if (codetype == 'C'){
+                                    eh.getSession().setMode("ace/mode/c_cpp");
+                                }
+                                else if (codetype == 'C++'){
+                                    eh.getSession().setMode("ace/mode/c_cpp");
+                                }
+                                else if (codetype == 'C#'){
+                                    eh.getSession().setMode("ace/mode/csharp");
+                                }
+                                else if (codetype == 'Python'){
+                                    eh.getSession().setMode("ace/mode/python");
+                                }
+                                else if (codetype == 'JAVA'){
+                                    eh.getSession().setMode("ace/mode/java");
+                                }
+                                else if (codetype == 'WEB'){
+                                    eh.getSession().setMode("ace/mode/html");
+                                }
+                                else if (codetype == 'DB'){
+                                    eh.getSession().setMode("ace/mode/mysql");
+                                }
+                                else if (codetype == '기타'){
+                                    eh.getSession().setMode("ace/mode/html");
+                                }
+                                else {
+                                    eh.getSession().setMode("ace/mode/html");
+                                }
+                            };
+                            seteditor();
+                        </script>
+                        <div class="row" style="padding-left:4%; padding-top:3%; padding-bottom:3%;">
+                            <div class="col-md-1.5">
+                                <label style="font-weight:600;">첨부파일</label>
+                            </div>
+                            <div class="col-md-10">
+                                <div>
+                                    {% if coaching_count.coachingfilema_set.all.0.Coaching_Files %}
+                                        <a style="text-align:left; text-decoration:none !important; color:#4d4d4d; font-weight:600;" href='{{ coaching_count.coachingfilema_set.all.0.Coaching_Files.url}}' download="{{coaching_count.coachingfilema_set.all.0.Coaching_Files}}">{{ coaching_count.coachingfilema_set.all.0.Coaching_Files}}</a>
+                                    {% else %}
+                                        <label style="text-align:left; color:#4d4d4d; font-weight:600;">첨부파일이 없습니다.</label>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if request.session.rank == '1'%}
+                        <div class="row" style="padding-left:4%; padding-top:3%; padding-bottom:3%;">
+                            <div class="col-md-1">
+                            </div>
+                            <div class="col-md-8">
+                            </div>
+                            <div class="col-md-3" style="font-size:14px; color:#4d4d4d;">
+                                <a href="{% url 'acincodingclinic:ModifyAnswer' coaching_count.id%}" style="text-decoration:none !important; color:#4d4d4d; font-weight:600; padding-left:48%;">수정</a> <a href="{% url 'acincodingclinic:DeleteAnswer' coaching_count.id %}" style="font-weight:600; padding-left:5%;text-decoration:none !important; color:#4d4d4d;">삭제</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {%endif%}
+                {% endfor %}
+                {% if coachingboard.Coaching_isAnswer == False %}
+                    <div class="col-md-6" id="isanswer_false" style="display:block; background-color:#d9d9d9; border-top: 1px solid #d9d9d9; border-right: 1px solid #d9d9d9; border-left: 1px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-radius:10px 10px 10px 10px; ">
+                        <div style=" padding-top:35%; text-align:center;">
+                            <img src="{% static 'acincodingclinic/img/design/isanswerfalse.png' %}" style="width:30%;">
+                            <div style="padding-top:3%;">
+                                <label style="font-weight:600; font-size:30px; color:#ffffff;">코칭 진행중입니다.</label>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-md-6" id="isanswer_false" style="display:none; background-color:#d9d9d9; border-top: 1px solid #d9d9d9; border-right: 1px solid #d9d9d9; border-left: 1px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-radius:10px 10px 10px 10px; ">
+                        <div style=" padding-top:35%; text-align:center;">
+                            <img src="{% static 'acincodingclinic/img/design/isanswerfalse.png' %}" style="width:30%;">
+                            <div style="padding-top:3%;">
+                                <label style="font-weight:600; font-size:30px; color:#ffffff;">코칭 진행중입니다.</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if userid.CDC_ID == coachingboard.Coaching_User.CDC_ID %}
+                    <div class="col-md-6" id="newanswer" style="background-color:#ffffff; border-top: 1px solid #ffffff; border-right: 1px solid #ffffff; border-left: 1px solid #ffffff; border-bottom: 1px solid #ffffff; border-radius:10px 10px 10px 10px; "></div>
+                {% else%} 
+                    <div class="col-md-6" id="newanswer" style="background-color:#d9d9d9; border-top: 1px solid #d9d9d9; border-right: 1px solid #d9d9d9; border-left: 1px solid #d9d9d9; border-bottom: 1px solid #d9d9d9; border-radius:10px 10px 10px 10px; "></div>
+                {% endif %}
+            </div>
+            {% if userid.CDC_ID == coachingboard.Coaching_User.CDC_ID or userid.rank == '1' %}
+                <div id="coaching_add_button1" style="text-align:center; font-size:20px; padding-top:3%;">
+                    <b>문제가 아직 해결되지 않으셨나요?</b> <b style="color:#0081ff">1:1코칭을 이어가세요!</b>
+                </div>
+                <div id="coaching_add_button2" style="text-align:center; margin-left:43%; font-weight:600; margin-top:3%; font-size:20px; padding-right:0.2%; padding-left:0.2%; padding-top:0.2%; padding-bottom:0.2%; margin-bottom:3%; border-radius:16px; background-color:#0081ff; color:#ffffff; cursor: pointer; width:13%;">
+                    <div id="answer" name="answer" style="border: 1px solid #ffffff; padding-top:6%; padding-bottom:6%; border-radius:16px;">1:1코칭 이어가기</div>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+    <script>
+        $(document).on("click", "#answer", function(){
+            answerAdd();
+        })
+
+        function answerAdd(){
+                $.ajax({
+                    type : "POST",
+                        url : "{% url 'acincodingclinic:NewAnswerAdd' %}",
+                        data : {
+                            'csrfmiddlewaretoken': '{{ csrf_token }}',
+                            'board_num' : '{{coachingboard.id}}',
+                            'userid' : '{{userid}}',
+                        },
+                        success : function(response)
+                        {
+                            if(response.msg == 'Y')
+                            {
+                                if(document.getElementById('isanswer_false').style.display == 'block'){
+                                    document.getElementById('isanswer_false').style.display = 'none'
+                                }
+                                var coachingUrl = "{% url  'acincodingclinic:AnswerCoaching' coachingboard.id %}";
+                                var form = "<form id='form' action="+coachingUrl+" method='POST' enctype='multipart/form-data' >";
+                                var csrf = "<input type='text' name='csrfmiddlewaretoken' value={{csrf_token}} hidden>";
+                                var content = "<label style='padding-top:3%;'>질문 내용</label><div id='Coaching_content'></div><input type='hidden' id='final_coachingcontent' name='coachingcontent' >";
+                                var codecontent = "<label style='padding-top:3%;'>코드 입력</label><br><div id='htmleditor'></div><input type='hidden' id='codeeditor' name='htmleditor'>";
+                                var file="<div class='row' style='text-align:center; vartical-align:middle; padding-top:1%;'><div class='col-md-2 form-group' style='padding-top:1%;'><label>첨부파일</label></div><div class='col-md-8 form-group input-file' style='margin:0; padding:0;'><input type='text' class='form-control' id='file-name' style='width:100%; border-radius:10px;' readonly></div><div class='col-md-2 form-group input-file' style='margin:0px; padding:0px;'><label for='file_upload' class='file-label' style='width:76%; height:70%; cursor:pointer'>찾아보기</label><input type='file' name='file_upload' id='file_upload' onchange='fileUpload(this);' class='file-upload' style='display:none;'></div></div>"
+                                var tosubmit = "<div style='text-align:center; padding-bottom:3%;'><button type='button' id='coaching_submit' class='btn btn-primary' onclick='checkcode();'>글쓰기</button></div></form></div>";
+        
+                                var addtrstart = '';
+                              
+                                addtrstart += form 
+                                addtrstart += csrf 
+                                addtrstart += content 
+                                addtrstart += codecontent 
+                                addtrstart += file
+                                addtrstart += tosubmit
+                                    
+                                document.getElementById("newanswer").innerHTML=addtrstart;
+                                document.getElementById('coaching_add_button1').style.display = 'none';
+                                document.getElementById('coaching_add_button2').style.display = 'none';
+                                seteditor();
+                                editsummernote();
+                            }
+                            else{
+                                alert('답변 완료시 글쓰기가 가능합니다.')
+                            }
+                        },
+                    });
+                }
+
+        function editsummernote(){
+            $('#Coaching_content').summernote({
+                lang: 'ko-KR',
+                tabsize: 2,
+                height: 300
+            });
+        }
+
+        function seteditor() {
+            var ed = ace.edit("htmleditor");
+            ed.setOptions({
+            fontSize: "15pt",
+            autoScrollEditorIntoView: true,
+            });
+            codetype = "{{coachingboard.get_Coaching_ClassCode_display}}";
+            ed.setTheme("ace/theme/monokai");
+            if (codetype == 'C'){
+                ed.getSession().setMode("ace/mode/c_cpp");
+            }
+            else if (codetype == 'C++'){
+                ed.getSession().setMode("ace/mode/c_cpp");
+            }
+            else if (codetype == 'C#'){
+                ed.getSession().setMode("ace/mode/csharp");
+            }
+            else if (codetype == 'Python'){
+                ed.getSession().setMode("ace/mode/python");
+            }
+            else if (codetype == 'JAVA'){
+                ed.getSession().setMode("ace/mode/java");
+            }
+            else if (codetype == 'WEB'){
+                ed.getSession().setMode("ace/mode/html");
+            }
+            else if (codetype == 'DB'){
+                ed.getSession().setMode("ace/mode/mysql");
+            }
+            else if (codetype == '기타'){
+                ed.getSession().setMode("ace/mode/html");
+            }
+            else {
+                ed.getSession().setMode("ace/mode/html");
+            }
+        };
+         function fileUpload(usr_file){
+            $("#file-name").val($(usr_file).val().split('/').pop().split('\\').pop()); 
+        }
+        function checkcode(){
+            //서머노트 내용
+            var markupStr = $('#Coaching_content').summernote('code');
+            $("#final_coachingcontent").val(markupStr);
+  
+            var ed = ace.edit("htmleditor");
+            codevalue = ed.getValue();
+            $("#codeeditor").val(codevalue);
+            console.log($("#htmleditor").val());
+            $("#form").submit();
+        }
+    </script>
+{% endblock %}

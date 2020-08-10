@@ -1,0 +1,207 @@
+{% extends "acincodingclinic/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.1/ace.js" charset="utf-8"></script>
+<!--서머노트-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-bs4.js"></script>
+<!--나눔 고딕-->
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+<style>
+/*coaching.html*/
+#coaching{
+    height:100%;
+    width:auto;
+    white-space: nowrap;
+    overflow:hidden;
+    position:relative;
+}
+#htmleditor{
+    height:100%;
+    min-height:60vh;
+    padding-left: 4.3%;
+    padding-top :1%;
+    display:inline-block;
+}
+#result{
+    position:absolute;
+    bottom:0; 
+    width:100%;
+    height:50%;
+}
+/* ace editor 사이즈 조절 */
+.ace_editor {
+    width: 98%;
+}
+.note-editor{
+    width: 98%;
+}
+/*coaching.html 종료*/
+</style>
+  <div class="container-fluid coachingmain" style="padding-bottom:3%; vartical-align:middle;">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10">
+        <div class="form-group" style="padding-top:3%;">
+          <label style="font-weight:600; font-size:42px; color:#4d4d4d;">코칭</label><label style="font-size:18px; color:#7c7c7c; padding-left:0.8%;">코딩클리 회원만이 누릴 수 있는 1:1 맞춤 코딩 지도</label>
+          <div style="margin-top:0.3%; background-color:white; border-top: 1.5px solid #B0C4DE; border-right: 1.5px solid #B0C4DE; border-left: 1.5px solid #B0C4DE; border-bottom: 1.5px solid #B0C4DE; border-radius:10px 10px 10px 10px; ">
+            <div style="padding-top:3%; padding-bottom:3%; padding-left:6%; font-size:23px;">
+              <div style="padding-bottom:2%;">코딩 전문가들에게 물어보세요!</div>
+              <div>
+                <b style="color:#0081ff">욕설, 비방, 광고, 허위사실 유포 등 부적절한 내용</b>의 게시글은 관리자 권한으로 <b style="color:#0081ff">강제 삭제 및 계정 정지등의 불이익</b>이 있을 수 있습니다.
+                <br>코딩 전문가와 <b style="color:#0081ff">1:1 코딩 코칭</b>을 통해 문제를 해결하는 곳입니다.
+              </div>   
+            </div>
+          </div>
+        </div>
+        <div style="width:98%; margin-left:1%; border-bottom: 2px solid #c6c6c6; ">
+        </div>
+        <form name="coaching_modify" action="{% url 'acincodingclinic:ModifyAnswer' coaching.id%}" method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <div class="row" style="width:100%; padding-left:1.5%; font-size:18px;">
+            <div class="col-md-1" style="padding-top:1%;text-align:center;">
+                <label>제목</label>
+            </div>
+            <div class="col-md-11 form-group" style="padding-top:1%;">
+                <input type="text" id="coachingtitle" name="coachingtitle" value="{{coaching.Coaching_Number.Coaching_Title}}" class="form-control" style="width:100%; border-radius:10px; " readonly>
+            </div>
+        </div>
+        <div class="row" style="width:100%; padding-left:1.5%; font-size:18px; text-align:center;">
+            <div class="col-md-1">
+                <label>분류</label>
+            </div>
+            <div class="col-md-1 form-group" >
+                <select id='coaching_classcode' name='coaching_classcode' class="form-control" style="border-radius:10px; width:113px;" onchange="seteditor();">
+                    <option value="{{coaching.Coaching_Number.Coaching_ClassCode}}" selected>{{coaching.Coaching_Number.get_Coaching_ClassCode_display}}</option>
+                </select>
+            </div>
+            <div class="col-md-1 form-group">
+              <label>첨부파일</label>
+            </div>
+            {% if file.Coaching_Files.name%}
+            <div class="col-md-8 form-group input-file" style="margin:0; padding:0;">
+              <input type="text" class="form-control" id="file-name" style="width:100%; border-radius:10px;" value="{{file.Coaching_Files.name}}" readonly>
+            </div>
+            {% else %}
+            <div class="col-md-8 form-group input-file" style="margin:0; padding:0;">
+              <input type="text" class="form-control" id="file-name" style="width:100%; border-radius:10px;" value="파일 없음" readonly>
+            </div>
+            {% endif %}
+            <div class="col-md-1 form-group input-file" style="margin:0px; padding:0px;">
+              <label for="file_upload" class="file-label" style="width:76%; height:71%;">찾아보기</label> 
+              <input type="file" name="file_upload" id="file_upload" onchange="fileUpload(this);" class="file-upload" style="display:none;">
+            </div>
+        </div>
+        <div style="width:98%; margin-left:1%; border-bottom: 2px solid #c6c6c6; ">
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="padding-left:4.3%; padding-top:1%">
+                <div class="form-group">
+                    <label style="font-size:18px; color:#4d4d4d;">질문 내용</label>
+                    <div id="Coaching_content"></div>
+                    <input type="hidden" id="final_coachingcontent" name="coachingcontent" >
+                      <script>
+                        var markupStr = '{{coaching.Coaching_Content|safe}}';
+                        $('#Coaching_content').summernote({
+                          lang: 'ko-KR',
+                          tabsize: 2,
+                          height: 600
+                        }).summernote('code',markupStr);
+                      </script>
+                </div>
+            </div>
+        </div>
+        <div style="padding-left:3.3%; padding-top:2%">
+            <div>
+                <label style="font-size:18px; color:#4d4d4d;">코드 작성</label><label style="font-size:13px; color:#7c7c7c; padding-left:0.8%;">해결하고 싶은 코드를 입력하거나 복사해주세요</label>
+            </div>
+            <div id="htmleditor">{{coaching.Coaching_CodeContent}}</div>
+            <input type="hidden" id="codeeditor">
+        </div>
+        </form>
+        <div class="row" style="padding-top:1%;">
+          <div class="col-md-2" style="padding-left:4.5%;">
+            <a class="btn btn-outline" style="background-color:#dee2e6; width:66%; border-radius:10px; font-size:18px" href="{%url 'acincodingclinic:Notice_menu' 1%}">전체 목록</a>
+          </div>
+          <div class="col-md-8" style="padding-top:2%; text-align:center;">
+          </div>
+          <div class="col-md-2" style="text-align:right; padding-right:3%;">
+            <button onclick="checkcode();" class="btn btn-outline" style="background-color:#dee2e6; width:55%; border-radius:10px; font-size:18px">작성하기</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+  </div>
+
+<script>
+    var eh = ace.edit("htmleditor");
+    eh.setOptions({
+        fontSize: "15pt",
+        autoScrollEditorIntoView: true,
+        });
+    $( document ).ready(function() {
+        seteditor();
+    });
+
+    function seteditor(){
+        var codelanguage = "{{coaching.Coaching_Number.get_Coaching_ClassCode_display}}";
+        eh.setTheme("ace/theme/monokai");
+        if (codelanguage == 'C'){
+            eh.getSession().setMode("ace/mode/c_cpp");
+        }
+        else if (codelanguage == 'C++'){
+            eh.getSession().setMode("ace/mode/c_cpp");
+        }
+        else if (codelanguage == 'C#'){
+            eh.getSession().setMode("ace/mode/csharp");
+        }
+        else if (codelanguage == 'Python'){
+            eh.getSession().setMode("ace/mode/python");
+        }
+        else if (codelanguage == 'JAVA'){
+            eh.getSession().setMode("ace/mode/java");
+        }
+        else if (codelanguage == 'WEB'){
+            eh.getSession().setMode("ace/mode/html");
+        }
+        else if (codelanguage == 'DB'){
+            eh.getSession().setMode("ace/mode/mysql");
+        }
+        else if (codelanguage == '기타'){
+            eh.getSession().setMode("ace/mode/html");
+        }
+        else {
+            eh.getSession().setMode("ace/mode/html");
+        }
+        $("#codeeditor").attr("name","htmleditor");
+    }
+
+    function fileUpload(usr_file){
+        $("#file-name").val($(usr_file).val().split('/').pop().split('\\').pop()); 
+    }
+    function checkcode(){
+        //서머노트 내용
+        var markupStr = $('#Coaching_content').summernote('code');
+        $("#final_coachingcontent").val(markupStr);
+  
+        //코드 내용
+        codesave = $(".ace_text-input");
+        codevalue = eh.getValue();
+        $("#codeeditor").val(codevalue);
+
+         document.coaching_modify.submit();
+    }
+
+</script>
+</body>
+{% endblock %}

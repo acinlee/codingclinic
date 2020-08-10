@@ -1,0 +1,234 @@
+/* base.html */
+body{ 
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight:400;
+    width:100%;
+    height:100%;
+}
+#navstyle{
+    background-image: url('/static/acincodingclinic/img/design/upbar.png');
+}
+#nav{
+    position:relative; 
+    margin-top:3px; 
+    margin-bottom:3px; 
+    text-align:center;
+    color:white;
+}
+.bar{ display:inline-block; width:1px; height:15px; margin-left:15px; margin-right:15px; background:white; position:relative; top:3px;}
+.menu{ font-size:13px;}
+#bignavstyle
+{
+    position:relative;
+    width:100%;
+    height:100%;
+    text-align:center;
+    background-color:white;
+    font-size:23px;
+    margin-top:30px;
+}
+#bignav{
+    margin-top:30px;
+}
+.bigmenu{margin-right:35px;}
+a.menu:hover{ 
+    text-decoration:none !important;
+    color:white;
+}
+a.bigmenu:hover { 
+    text-decoration:none !important;
+    color:black;
+}
+a.menu{ 
+    text-decoration:none !important;
+    color:white;
+}
+a.bigmenu{ 
+    text-decoration:none !important;
+    color:black;
+}
+#mainpic{
+    background: url('/static/acincodingclinic/img/design/main5.jpg');
+}
+#pointbtn {
+    background: url('/static/acincodingclinic/img/design/battery.png') no-repeat;
+    background-size: cover;
+    background-position: center;
+    margin-left:1%;
+}
+#myCarousel{
+    margin-top:15px;
+}
+#tablestyle{
+    font-size:15px;
+    text-align:center;
+}
+/*base.html 종료*/
+/*SignUp.html*/
+.signupcss{
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: 400;
+    background-color: #F5F6F7;
+}
+.signuplabel{
+    font-weight: 600;
+    font-size:17px;
+}
+#gohome{
+    text-align:right;
+}
+#gohomelogo{ 
+    margin-top:30px;
+    width:8%;
+}
+#logo{
+    text-align:center;
+    margin-bottom:24px;
+}
+#smalllogo{ 
+    width:60%;
+}
+.form-control{
+    height:55px;
+}
+/*SignUp.html 종료*/
+/* loginpage.html */
+.login_page{ 
+    font-family: 'Nanum Gothic', sans-serif;
+    background-color: #F5F6F7;
+    font-weight:400;
+}
+#login{
+    padding-top:11%;
+}
+#gohome-logo{
+    text-align:right;
+}
+.gohome-logo-style{
+    width:10%;
+}
+#login-logo{
+    text-align:center;
+}
+.login-logo-style{
+    width:85%;
+}
+#id-text{
+    padding-top:5%;
+    font-size:21px;
+}
+#pw-text{
+    font-size:21px;
+}
+#cdc_id{
+    border-radius: 10px!important; 
+    height:55px;
+}
+#cdc_pw{
+    border-radius: 10px!important; 
+    height:55px;
+}
+/* loginpage.html 종료*/
+/* find_user_info.html*/
+.find_usr_page{ 
+    font-family: 'Nanum Gothic', sans-serif;
+    background-color: #F5F6F7;
+    font-weight:600;
+}
+#find-logo{
+    text-align:center;
+}
+.find-logo-style{
+    width:85%;
+}
+#find_usr{
+    padding-top:6%;
+}
+#find_usr_name{
+    border-radius: 10px!important; 
+    font-size:20px;
+    height:55px;
+}
+#find_usr_id{
+    border-radius: 10px!important; 
+    font-size:20px;
+    height:55px;
+}
+#find_usr_email{
+    border-radius: 10px!important; 
+    font-size:20px;
+    height:55px;
+}
+/* find_user_info.html 종료*/
+/* tocoaching.html */
+.coachingmain{
+    font-family: 'Nanum Gothic', sans-serif;
+    background-color: #F5F6F7;
+    font-weight:400;
+}
+/* tocoaching.html 종료*/
+/* writenotice.html*/
+#id_Notice_Files{
+    background-color:#dee2e6; width:85%; border-radius:10px; font-size:18px;
+}
+/* input file type */ 
+.input-file { 
+    position: absolute;
+    display: inline-block; 
+} 
+.input-file [type="file"] 
+{ 
+    position: relative; 
+    width: 1px; 
+    height: 1px; 
+    padding: 0; 
+    margin: -1px; 
+    display: none;
+    overflow: hidden; 
+    clip: rect(0, 0, 0, 0); border: 0 none; 
+} 
+
+.file-label 
+{ 
+    display: inline-block; 
+    width:50%; 
+    height:100%;
+    padding-top:4%;
+    border-color:#c6c6c6;
+    border-radius:10px;
+    background-color: #c6c6c6; color: black; 
+    text-align: center; 
+} 
+
+input[readonly]{
+    background: white; 
+    text-indent: 5px; 
+    border: 1px solid #bbb; 
+  }
+
+
+/* writenotice.html 종료*/
+/* board.html */
+#all_type, #C_type, #Cplus_type, #Cshop_type,
+#Python_type, #JAVA_type, #DB_type, #WEB_type, #anything_type{
+    width:172.5px;
+    height:100px; 
+    border:1px solid #7c7c7c; 
+    border-bottom:3px solid #0081ff;
+}
+
+#all_type > a, #C_type > a, #Cplus_type > a, #Cshop_type > a,
+#Python_type > a, #JAVA_type > a, #DB_type > a, #WEB_type > a, #anything_type > a{
+    font-weight:600; 
+    text-decoration:none !important; 
+    color:#4d4d4d;
+}
+
+/* active 효과주는 용도*/
+.typeactive{
+    background-color:#0081ff;
+    border:1px solid #0081ff; 
+}
+.typecolor{color:#FFFAF0;}
+
+/* board.html 종료 */

@@ -1,0 +1,128 @@
+{% extends "acincodingclinic/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!--나눔 고딕-->
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+<!--주영's 아이콘-->
+<script src="https://kit.fontawesome.com/01bdf36058.js"></script>
+  <div class="container-fluid coachingmain" style="padding-bottom:3%;">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10">
+        <div class="form-group" style="padding-top:3%;">
+          <label style="font-weight:600; font-size:42px; color:#4d4d4d;">코칭</label><label style="font-size:18px; color:#7c7c7c; padding-left:0.8%;">코딩클리닉 회원만이 누릴 수 있는 1:1 맞춤 코딩 지도</label>
+          <div style="margin-top:0.3%; background-color:white; border-top: 1.5px solid #B0C4DE; border-right: 1.5px solid #B0C4DE; border-left: 1.5px solid #B0C4DE; border-bottom: 1.5px solid #B0C4DE; border-radius:10px 10px 10px 10px; ">
+            <div style="padding-top:3%; padding-bottom:3%; padding-left:6%; font-size:23px;">
+              <div style="padding-bottom:2%;">코딩 전문가들에게 물어보세요!</div>
+              <div>
+                <b style="color:#0081ff">욕설, 비방, 광고, 허위사실 유포 등 부적절한 내용</b>의 게시글은 관리자 권한으로 <b style="color:#0081ff">강제 삭제 및 계정 정지등의 불이익</b>이 있을 수 있습니다.
+                <br>코딩 전문가와 <b style="color:#0081ff">1:1 코딩 코칭</b>을 통해 문제를 해결하는 곳입니다.
+              </div>  
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="padding-top:3%; vertical-align:middle; font-size:18px;">
+        <form name="coaching_find_form" style="display:inline;" action="{% url 'acincodingclinic:findCoaching' %}" method="POST" enctype="multipart/form-data" >
+          {% csrf_token %}  
+          <select class="mdb-select md-form" id="coaching_find" name="coaching_find" style="width:10%; height:50px; text-align-last:center;">
+            <option value="제목">제목</option>
+            <option value="내용">내용</option>
+          </select>
+          <input type="text" id="coaching_content_find" name="coaching_content_find" style="position:relative; left:1%; width:30%; height:50px;" placeholder="   찾고 싶은 내용을 적어주세요">
+          <img src="{% static 'acincodingclinic/img/design/magnifyingglass.png'%}" onclick="findcontent();" style="cursor:pointer; position:relative; vertical-align:middle; right:2.3%; width:2%; height:2%;">
+          </form>
+          <form name="coaching_sort_form" style="display:inline;" action="{% url 'acincodingclinic:sortCoaching' %}" method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <select class="mdb-select md-form" id="coaching_sort" name="coaching_sort" onchange="sortcontent();" style="position:relative; left:47%; width:10%; height:50px; text-align-last:center;">
+            {% if sort_numeber == 1 %}
+              <option value="역순">역순</option>
+              <option value="최신순">최신순</option>
+            {% else %}
+              <option value="최신순">최신순</option>
+              <option value="역순">역순</option>
+            {% endif %}
+            </select>
+          </form>
+        </div>
+        <div class="form-group">
+          <table class="table" style="font-size:18px; border-top: 1px solid; border-bottom: 1px solid #dee2e6; text-align:center;">
+            <thead>
+              <tr>
+                <th scope="col" style="width:10%;">번호</th>
+                <th scope="col" style="width:10%;">분류</th>
+                <th scope="col" style="width:10%;">작성자</th>
+                <th scope="col" style="width:50%;">제목</th>
+                <th scope="col" style="width:10%;">등록일</th>
+                <th scope="col" style="width:10%;">진행사항</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for coaching_content in posts %}
+              {% csrf_token %}
+                <tr>
+                  <th scope="row">{{coaching_content.id}}</th>
+                  <!--<td>{{coaching_content.coaching_set.all.0.get_Coaching_ClassCode_display}}</td>-->
+                  <td>{{coaching_content.get_Coaching_ClassCode_display}}</td>
+                  <td>{{coaching_content.Coaching_User}}</td>
+                  <td style="text-align:left;"><a href="{% url 'acincodingclinic:ViewCoaching' coaching_content.id %}" style="text-decoration:none !important; color:black;">{{coaching_content.Coaching_Title}}</a></td>
+                  <td>{{coaching_content.Coaching_CreateDate|date:"Y/m/d"}}</td>
+                  {% if coaching_content.Coaching_isAnswer %}
+                    <td style="color:green;">답변완료</td>
+                  {% else %}
+                    <td style="color:red;">진행중</td>
+                  {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style=" vertical-align:middle">
+          <div class="col-md-2">
+          </div>
+          <div class="col-md-8" style="padding-top:2%; text-align:center;">
+            {% if posts.has_other_pages %}
+                {% if posts.has_previous %}
+                  <a style="color:#4d4d4d" href="?page={{ posts.previous_page_number }}"><i class="fas fa-angle-left"></i></a>
+                {% else %}
+                  <i style="color:#4d4d4d" class="fas fa-angle-left"></i>
+                {% endif %}
+                <span>|<span>
+                {% for i in posts.paginator.page_range %}
+                  {% if posts.number == i %}
+                    <span style="color:#0081ff">{{ i }} <span class="sr-only">(current)</span></span>
+                  {% else %}
+                    <a style="color:#4d4d4d" href="?page={{ i }}">{{ i }}</a>
+                  {% endif %}
+                  <span>|<span>
+                {% endfor %}
+                {% if posts.has_next %}
+                  <a style="color:#4d4d4d" href="?page={{ posts.next_page_number }}"><i class="fas fa-angle-right"></i></a>
+                {% else %}
+                  <span style="color:#4d4d4d"><i class="fas fa-angle-right"></i></span>
+                {% endif %}
+            {% endif %}
+          </div>
+          <div class="col-md-2" style="text-align:right;">
+            <a class="btn btn-outline btn-sm m-0" style="background-color:#dee2e6; width:40%; font-size:18px" href="{% url 'acincodingclinic:toWriteCoaching' %}">작성하기</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+  </div>
+<script>
+  function findcontent(){
+    document.coaching_find_form.submit();
+  }
+  function sortcontent(){
+    document.coaching_sort_form.submit();
+  }
+</script>
+{% endblock %}

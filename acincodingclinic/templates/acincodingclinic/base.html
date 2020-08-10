@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--아임포트-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <!--나눔고딕-->
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+<!--오류 발생 알람메시지-->
+{% if messages %}
+    {% for message in messages %} 
+        <script>alert("{{message}}");</script>
+    {% endfor %}
+{% endif %}
+<!--알람 끝-->
+</head>
+<body>
+<div id="mainwidth">
+    <nav class="site-header sticky-top py-1" id="navstyle">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-5">
+                </div>
+                <div class="col-md-7" id="nav">
+                    {% if request.session.cdc_id %}
+                        <a class="menu" href="{%url 'acincodingclinic:logout'%}">로그아웃</a>
+                    {% else %}
+                        <a class="menu" href="{%url 'acincodingclinic:loginpage'%}">로그인</a>
+                        <span class="bar"></span>
+                        <a class="menu" href="{% url 'acincodingclinic:toSignUp' %}">회원가입</a>
+                    {% endif %}
+                    <span class="bar"></span>
+                    <a class="menu" href="{% url 'acincodingclinic:main' %}">홈</a>
+                    <span class="bar"></span>
+                    {% if request.session.cdc_id %}
+                        <a class="menu" href="{%url 'acincodingclinic:gomypage'%}">마이페이지</a>
+                        <!--<span class="bar"></span>
+                        <img class="menu img-logo" width="20" height="20" src="{% static 'acincodingclinic/img/design/won.png'%}">
+                        <a class="menu text">0</a>
+                        <input type="button" class="btn" onclick="codingimport();" id="pointbtn" style="width:32px; height:20px;">-->
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    <nav class="site-header sticky-top py-1" id="bignavstyle">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-3" id="codinglogo">
+                    <a href="{% url 'acincodingclinic:main' %}"><img class="img-logo" style="width:100%;" src="{% static 'acincodingclinic/img/design/biglogo.png'%}"></a>
+                </div>
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-6" id="bignav">
+                    <a class="bigmenu" href="{%url 'acincodingclinic:codingclinic_info_page'%}">소개</a>
+                    <a class="bigmenu" href="{%url 'acincodingclinic:Notice_menu' 1%}">공지사항</a>
+                    <a class="bigmenu">강의</a>
+                    <a class="bigmenu" href="{%url 'acincodingclinic:Coaching_menu' 1%}">코칭</a>
+                    <a class="bigmenu" href="{%url 'acincodingclinic:Error_board_menu' 1%}">Q&A</a>
+                    <a class="bigmenu" href="{%url 'acincodingclinic:board_menu' 1%}">커뮤니티</a>
+                </div>
+                <div class="col-md-1">
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+    <div class="container-fluid" style="position:relative; background-color: #4a7baa;">
+        <div class="row">
+            <div class="col-md-1" >
+            </div>
+            <div class="col-md-10">
+                <img src="{% static 'acincodingclinic/img/design/banner.png'%}" style="width:100%;">
+            </div>
+            <div style="position:absolute; left:12%; bottom:10%; font-size:13px; color:white;">
+                <p>대표 : 노기섭</p>
+                <p>주소 : 청주대학교 이공대학 구관 07-326</p>
+                <p>영업시간 : 10:00 ~ 18:00</p>
+                <p>대표전화 : 010-5696-2399</p>
+                <br>
+                <a>개인정보취급방침</a> <a>이용약관</a> <a>문의사항</a>
+            </div>
+            <div style="position:absolute; left:76.3%; top:10%; font-size:13px; color:white;">
+                <img src="{% static 'acincodingclinic/img/design/katalk.png'%}" style="width:6%;"><a>  카카오톡플러스친구</a>
+                <br><br><br>
+                <img src="{% static 'acincodingclinic/img/design/instram.png'%}" style="width:6%;"><a>  인스타그램</a>
+                <br><br><br>
+                <img src="{% static 'acincodingclinic/img/design/facebook.png'%}" style="width:6%;"><a>  페이스북</a>
+                <br><br><br>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var IMP = window.IMP; // 생략가능
+    IMP.init('imp35444606'); // 'iamport' 대신 부여받은 "가맹점 식별코드"를 사용
+function codingimport(){
+    IMP.request_pay({
+    pg : 'html5_inicis',
+    pay_method : 'card',
+    merchant_uid : 'merchant_' + new Date().getTime(),
+    name : '주문명:결제테스트',
+    amount : 10000,
+    buyer_email : 'iamport@siot.do',
+    buyer_name : '구매자이름',
+    buyer_tel : '010-1234-5678',
+    buyer_addr : '서울특별시 강남구 삼성동',
+    buyer_postcode : '123-456'
+}, function(rsp) {
+    if ( rsp.success ) {
+        var msg = '결제가 완료되었습니다.';
+        msg += '고유ID : ' + rsp.imp_uid;
+        msg += '상점 거래ID : ' + rsp.merchant_uid;
+        msg += '결제 금액 : ' + rsp.paid_amount;
+        msg += '카드 승인번호 : ' + rsp.apply_num;
+    } else {
+        var msg = '결제에 실패하였습니다.';
+        msg += '에러내용 : ' + rsp.error_msg;
+    }
+
+    alert(msg);
+});
+}
+    
+
+    
+</script>
+</body>
+</html>

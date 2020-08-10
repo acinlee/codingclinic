@@ -1,0 +1,65 @@
+{% extends "acincodingclinic/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'acincodingclinic/css/style.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!--나눔 고딕-->
+<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic&display=swap" rel="stylesheet">
+  <div class="container-fluid coachingmain">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-10" style="padding-bottom:3%;">
+        <div class="form-group" style="padding-top:3%; padding-bottom:3%;">
+          <label style="font-weight:600; font-size:42px; color:#4d4d4d;">Q&A</label><label style="font-size:18px; color:#7c7c7c; padding-left:0.8%;">신고 및 문의</label>
+          <div style="margin-top:0.3%; background-color:white; border-top: 1.5px solid #B0C4DE; border-right: 1.5px solid #B0C4DE; border-left: 1.5px solid #B0C4DE; border-bottom: 1.5px solid #B0C4DE; border-radius:10px 10px 10px 10px; ">
+            <div style="padding-top:3%; padding-bottom:3%; padding-left:6%; font-size:23px;">
+              <div style="padding-bottom:2%;">코딩클리닉은 언제나 더 나은 서비스를 제공해 드리고자 노력하고 있습니다.</div>
+              <div>
+                <b style="color:#0081ff">욕설, 비방, 광고, 허위사실 유포 등 부적절한 내용</b>의 게시글은 관리자 권한으로 <b style="color:#0081ff">강제 삭제 처리 및 징계</b>가 있을 수 있습니다.<br>
+                코딩클리닉 이용 중 불편한 점이 있다면 신속하게 해결하도록 노력하겠습니다.
+              </div>  
+            </div>
+          </div>
+        </div>
+        <div class="row"style="padding-top:1%; color:#7c7c7c; padding-bottom:1%; text-align:center; width:98%; margin-left:1%; border-top:2px solid #c6c6c6; border-bottom:2px solid #c6c6c6;">
+            <div class="col-md-1">
+                <label style="margin-top:10%;">{{errorboard.get_Error_ClassCode_display}}</label>
+            </div>
+            <div class="col-md-9" style="text-align:left; font-size:23px; color:#4d4d4d;">
+                <label style="margin-top:1%; font-weight:600;">{{errorboard.Error_Title}}</label>
+            </div>
+            <div class="col-md-1">
+                <label style="margin-top:10%;">{{errorboard.Error_User.CDC_Name}}</label>
+            </div>
+            <div class="col-md-1">
+                <label style="margin-top:10%;">{{errorboard.Error_Date|date:"Y/m/d"}}</label>
+            </div>
+        </div>
+        <div class="row" style="text-align:center; padding-top:1%; width:98%; margin-left:1%; border-bottom:2px solid #c6c6c6;">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10" style="text-align:left; padding-bottom:20%; color:#4d4d4d;">
+                {{errorboard.Error_Content|safe}}
+            </div>
+            <div class="col-md-1">
+                <div style="position:relative; top:85%; font-size:15px;">
+                    <a href="" style="text-decoration:none !important; color:#7c7c7c;">수정</a> 
+                    <a href="" style="padding-left:8%; text-decoration:none !important; color:#7c7c7c;">삭제</a>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="text-align:center;width:98%; padding-top:3%; padding-bottom:3%; margin-left:1%;">
+            <div class="col-md-12">
+                <a href="{% url 'acincodingclinic:errorboard_menu_default'%}"><button class="btn btn-outline" style="background-color:white; border-color:#dee2e6; width:8%; border-radius:10px; font-size:18px">전체목록</button></a>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-1">
+      </div>
+    </div>
+  </div>
+{% endblock %}
